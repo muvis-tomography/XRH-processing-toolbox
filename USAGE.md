@@ -1,8 +1,8 @@
 # XRH Processing Toolbox
 
 This is a collection of macros for Fiji/ImageJ that were developed for working with XRH datasets, but can be used for any CTData set.
-Brief details about using each script is given below.  For more details please see the code itself, these scripts are intended to be used by people with priori image processing experience.
-Where needed each script will prompt for input as it progresses.
+Brief details about using each script is given below.  For more details please see the code itself, this documentation is intended as a high level overview only. These scripts are intended to be used by people with priori image processing experience.
+Where needed each script will prompt for input as it progresses with instructions on what to do, where possible all values will have reasonable defaults.
 
 ## addVolumeDimensions
 
@@ -40,7 +40,27 @@ If autogeneration is disabled then the following single stacks can be created
 
 Prior to video generation the volume can be cropped to only show a ROI.
 
-##BackgroundLinearSlopeCorrection
+## BackgroundLinearSlopeCorrection
+Takes a volume as input.  The user needs to select an area containing background.  This area must contain background (e.g. wax) throughout the entire stack.  It then goes through this background area and identifies any linear gradient between the slices.
+
+TODO OLK TO add more in here.
+
+## BicubisStackResize
+Works on a volume and prompts the user to enter how many times they want to bin the data, for example 2 would half the size of all dimensions.  If binning by an even number and the volume has an odd dimension it will remove 1 pixel in the required dimension to make it even.
+
+## cassetteBandsCorrection
+When scanning a wax block on a histology cassettee the plastic cassette itself can cause artefacts that propegate through the image.  This works on a single volume that has the issue and tries to remove the artefacts.  The volume must first be orientated so that scrolling through the Z stack scrolls through the histologically relevent plane.  This can be achieved using the HistologicalReleventReslice macro.
+
+Once the user has selected the volume they will be prompted to draw a line parallel to the cassette artefact that they want to remove (a single slice will be presented for this to be done on).  The volume is then rotated so that the line is parallel to Y'Y. The volume is rotated back to the original angle at the end of the script.  If manual operation is chosen then the user has to manually select a background area of the volume.  Each slice will then be processed in turn.  The user can chose to do grey level calibration at the end to remove any offset introduced by the processing.
+
+## HistRelevantReslice
+Works on a single volume, and rotates it so that scrolling through the Z stack is the same as slicing the wax block with a microtome.
+
+Options:
+ - Manual/Automatic cropping of volume to wax.
+ - Optimising memory usage - closes temporary volumes when no longer needed to free up system RAM.
+ 
+ This script prompts the user to draw a line on the wax-air boundary for each plane and will then rotate the volume to align these with the axis, enlarging the voume as needed.  At the end an option is given to reverse the stack if it is slicing from cassette to top of block rather than top down.
 
 ## ImportRAWandNikonVOLfiles
 A simple macro to make opening either RAW files or vgi./.vol files.  Can be bound to shortcut keys e.g. 'v' and 'g' to make opening even quicker.
@@ -53,3 +73,35 @@ It will automatically pull the x,y,z dimensions and the bit depth from the vgi f
 
 ### Raw files
 These need to have the filename in the format as described in addVolumeDimensions.  
+
+## Suppress Lines
+Works on a single volume to supress lines throughout the volume.  The user is prompted for a number of parameters:
+- Number of line orientations to suprress
+- Frequency bandwidth for the FFT filter used to supress the Lines
+- Orientation rigidity - how much the line can deviate from line specified.
+- Gamma correction facter
+- Calibration - adjust the post correction grey values to match the pre-correction ones
+
+## ThickSliceBoost
+Works on a single volume and will use a rolling thick slice window to combine slices to enhance the image.  
+
+Options:
+- Number of slices to include in calculation
+- Operation to use to generate boosted volume
+    - Average intensity
+    - Max intensity
+	- Min intensity
+	- Standard deviation
+	- Median
+- Operation to use to combine boosted volume with original volume
+	- Average Intensity
+	- Max Intensity
+	- Min Intensity
+	- Standard deviation
+	- Add
+	- Subtract
+	- Multiply
+	- Difference
+- Gamma correction factor
+
+A volume of thick slices will be generated using the first algorithm selected, this volume is then combined with the original to enhance each slice using the second algorithm.

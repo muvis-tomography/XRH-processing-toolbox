@@ -48,8 +48,10 @@ function ThickSliceRollfunction (InputTemp, SliceThickness, RangeMin, RangeMax, 
 				
 //		selectWindow(InputVolume);
 //		print("Slice range : ",RangeMin, " ,", RangeMax);
-		Range = RangeMax-RangeMin; print("Range : ", Range, "clices"); 
-		ThickSliceNumber = Range - SliceThickness; print("Thick slice stack size (slices) : ", ThickSliceNumber);
+		Range = RangeMax-RangeMin; 
+		print("Range : ", Range, "clices"); 
+		ThickSliceNumber = Range - SliceThickness; 
+		print("Thick slice stack size (slices) : ", ThickSliceNumber);
 		
 			 
 		setBatchMode(true);
@@ -68,16 +70,15 @@ function ThickSliceRollfunction (InputTemp, SliceThickness, RangeMin, RangeMax, 
 			run("Z Project...", "projection=&Operation");
 			if (i == 0) { 
 				rename("ThickSliceStack");
-			}
-				else {
-				ThickSliceTempName = (i+1); rename(ThickSliceTempName);
+			}else {
+				ThickSliceTempName = (i+1); 
+				rename(ThickSliceTempName);
 				close("TempThickSliceStack");
 			}
-			
-				if (i != 0) {
-					img2 = ThickSliceTempName;
-					run("Concatenate...", "title=ThickSliceStack open image1=ThickSliceStack image2=&img2");
-				}
+			if (i != 0) {
+				img2 = ThickSliceTempName;
+				run("Concatenate...", "title=ThickSliceStack open image1=ThickSliceStack image2=&img2");
+			}
 		  }
 		setBatchMode(false);
 }
@@ -85,10 +86,10 @@ function ThickSliceRollfunction (InputTemp, SliceThickness, RangeMin, RangeMax, 
 
 function CalibrateVolume(InputVolume, BckCorVolumeName) {
 
-  if (isOpen("ROI Manager")) {
-     selectWindow("ROI Manager");
-     run("Close");
-  }
+	if (isOpen("ROI Manager")) {
+		selectWindow("ROI Manager");
+		run("Close");
+	}
 
 	// Grey Calibration to match input volume//
 	run("Set Measurements...", "area mean standard modal min centroid center bounding fit feret's integrated median redirect=None decimal=7");
@@ -100,13 +101,16 @@ function CalibrateVolume(InputVolume, BckCorVolumeName) {
 	// select BckCorr volume - Wax --------------------------------------------------
 	setTool("rectangle");
 	run("Clear Results");
-	selectWindow(BckCorVolumeName); resetMinAndMax;
+	selectWindow(BckCorVolumeName); 
+	resetMinAndMax;
 	setSlice(nSlices/2);
 	waitForUser( "Pause","select Low Intensity (dark area) ROI in Processed Volume and then press OK \n ...");
 	BckCorVolumeWaxSlice = getSliceNumber();
 	roiManager("Add"); // Add Wax selection to ROI Manager
-	run("Measure"); BckCorVolumeWax = getResult("Mean"); // get Wax Mean value from LS volume
-	print("BckCorVolumeWax = ", BckCorVolumeWax); run("Select None");
+	run("Measure"); 
+	BckCorVolumeWax = getResult("Mean"); // get Wax Mean value from LS volume
+	print("BckCorVolumeWax = ", BckCorVolumeWax); 
+	run("Select None");
 	//--------------------------------------------------------------------------
 	// select BckCor volume volume - Tissue -----------------------------------------------
 	run("Clear Results");
@@ -114,23 +118,31 @@ function CalibrateVolume(InputVolume, BckCorVolumeName) {
 	waitForUser( "Pause","select High Intensity (bright area) in Processed Volume and then press OK \n ...");
 	BckCorVolumeTissueSlice = getSliceNumber();
 	roiManager("Add"); // Add Wax selection to ROI Manager
-	run("Measure"); BckCorVolumeTissue = getResult("Mean"); // get Wax Mean value from LS volume
-	print("BckCorVolumeTissue = ", BckCorVolumeTissue); run("Select None");
+	run("Measure"); 
+	BckCorVolumeTissue = getResult("Mean"); // get Wax Mean value from LS volume
+	print("BckCorVolumeTissue = ", BckCorVolumeTissue); 
+	run("Select None");
 
 	//--------------------------------------------------------------------------
 	// select Input volume - Wax ----------------------------------------------
 	run("Clear Results");
 	selectWindow(InputVolume);
 	setSlice(BckCorVolumeWaxSlice); // go to appropriate slice in the stack
-	roiManager("Select", 0); run("Measure"); InputVolumeWax = getResult("Mean"); // get Wax Mean value from LS volume
-	print("InputVolumeWax = ", BckCorVolumeWax); run("Select None");
+	roiManager("Select", 0); 
+	run("Measure"); 
+	InputVolumeWax = getResult("Mean"); // get Wax Mean value from LS volume
+	print("InputVolumeWax = ", BckCorVolumeWax); 
+	run("Select None");
 	//--------------------------------------------------------------------------
 	// select Input volume - Tissue -------------------------------------------
 	run("Clear Results");
 	selectWindow(InputVolume);
 	setSlice(BckCorVolumeTissueSlice); // go to appropriate slice in the stack
-	roiManager("Select", 1); run("Measure"); InputVolumeTissue = getResult("Mean"); // get Wax Mean value from LS volume
-	print("InputVolumeWax = ", InputVolumeTissue); run("Select None");
+	roiManager("Select", 1); 
+	run("Measure"); 
+	InputVolumeTissue = getResult("Mean"); // get Wax Mean value from LS volume
+	print("InputVolumeWax = ", InputVolumeTissue); 
+	run("Select None");
 
 
 	//............................//
@@ -162,11 +174,16 @@ function CalibrateVolume(InputVolume, BckCorVolumeName) {
 
 	// Offset BckCorVolume tissue intensity to match InputVolume's -----
 	setSlice(BckCorVolumeTissueSlice); // go to appropriate slice in the stack
-	roiManager("Select", 1); run("Measure"); calBckCorTissue = getResult("Mean"); // get Wax Mean value from LS volume
+	roiManager("Select", 1); 
+	run("Measure"); 
+	calBckCorTissue = getResult("Mean"); // get Wax Mean value from LS volume
 	Offset = InputVolumeTissue-calBckCorTissue;
-	print("Offset (InputVolumeTissue-calBckCorTissue) = ", Offset); run("Select None");
-	run("Add...", "value=Offset stack"); resetMinAndMax();
-	selectWindow(InputVolume); bitDepthInput = bitDepth();
+	print("Offset (InputVolumeTissue-calBckCorTissue) = ", Offset); 
+	run("Select None");
+	run("Add...", "value=Offset stack"); 
+	resetMinAndMax();
+	selectWindow(InputVolume); 
+	bitDepthInput = bitDepth();
 	//selectWindow("c"+BCorVolumeName);
 	selectWindow(BckCorVolumeName);
 	if (bitDepthInput == 16) {
@@ -189,9 +206,11 @@ function CalibrateVolume(InputVolume, BckCorVolumeName) {
 // get Input volume name      //
 //............................//
 	waitForUser("Action required", "Select Input Volume window *then* OK [ESC to abort]"); 
-	InputVolume = getTitle(); bitDepthVolume = bitDepth();
+	InputVolume = getTitle(); 
+	bitDepthVolume = bitDepth();
 	print("\\Clear"); // Clear Log Window
-	print(InputVolume); 	print("bitDepth : ", bitDepthVolume);
+	print(InputVolume); 	
+	print("bitDepth : ", bitDepthVolume);
 	
 //............................//
 // Wait for user selection    //
@@ -248,10 +267,11 @@ function CalibrateVolume(InputVolume, BckCorVolumeName) {
 for (i = 0; i < 4; i++) {
 	if (i==1) {
 		//InputVolume = "XY"; //Replace this with varable in future
-		selectWindow(InputVolume); RangeMax = nSlices;
+		selectWindow(InputVolume); 
+		RangeMax = nSlices;
 		ThickSliceSNRBoost(InputVolume, SliceThickness, RangeMin, RangeMax, Operation, GmmaCor);
 		rename("ThickBoostedXY");
-		}
+	}
 	if (i==2) {
 		//InputVolume = "XY"; //Replace this with varable in future
 		selectWindow(InputVolume);
@@ -261,14 +281,16 @@ for (i = 0; i < 4; i++) {
 		run("Reslice [/]...", "output=1.000 start=Top avoid");
 		rename("ThickBoostedXZ");
 		selectWindow("ThickBoostedTemp");
-		close("ThickBoostedTemp"); close("XZ");
-		}
+		close("ThickBoostedTemp"); 
+		close("XZ");
+	}
 		
 	if (i==3) {
 		//InputVolume = "XY"; //Replace this with varable in future
 		selectWindow(InputVolume);
 		run("Reslice [/]...", "output=1.000 start=Left avoid");
-		rename("YZ");  RangeMax = nSlices;
+		rename("YZ");  
+		RangeMax = nSlices;
 		ThickSliceSNRBoost("YZ", SliceThickness, RangeMin, RangeMax, Operation, GmmaCor);
 		run("Reslice [/]...", "output=1.000 start=Top avoid");
 		close("ThickBoostedTemp");
@@ -277,7 +299,8 @@ for (i = 0; i < 4; i++) {
 		run("Flip Vertically", "stack");
 		rename("ThickBoostedYZ");
 		
-		close("ThickBoostedTemp"); close("YZ");
+		close("ThickBoostedTemp"); 
+		close("YZ");
 
 		}
 
@@ -285,12 +308,14 @@ for (i = 0; i < 4; i++) {
 
 
 
-imageCalculator(""+BoostVolumesCombinationOperation+" create 32-bit stack", "ThickBoostedXZ","ThickBoostedYZ");
-	selectWindow("Result of ThickBoostedXZ"); rename("XZYZ");
+	imageCalculator(""+BoostVolumesCombinationOperation+" create 32-bit stack", "ThickBoostedXZ","ThickBoostedYZ");
+	selectWindow("Result of ThickBoostedXZ"); 
+	rename("XZYZ");
 	if (KeepPartialVolume==false){
-		close("ThickBoostedXZ"); close("ThickBoostedYZ");
+		close("ThickBoostedXZ"); 
+		close("ThickBoostedYZ");
 	}
-imageCalculator(""+BoostVolumesCombinationOperation+" create 32-bit stack", "XZYZ","ThickBoostedXY");
+	imageCalculator(""+BoostVolumesCombinationOperation+" create 32-bit stack", "XZYZ","ThickBoostedXY");
 	selectWindow("Result of XZYZ");
 		// Rename processed volume
 		if (Operation == "Average Intensity") OperationFileName="AvgInt";
@@ -313,7 +338,8 @@ imageCalculator(""+BoostVolumesCombinationOperation+" create 32-bit stack", "XZY
 		CalibrationVolumeName = getTitle();
 		
 	if (KeepPartialVolume==false){
-		close("XZYZ"); close("ThickBoostedXY");
+		close("XZYZ"); 
+		close("ThickBoostedXY");
 	}
 /*
 		imageCalculator("Multiply create 32-bit stack", CalibrationVolumeName, InputVolume); 

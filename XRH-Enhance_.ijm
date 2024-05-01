@@ -43,7 +43,8 @@ function addSettingsPrefix (sigma, Xrad, Yrad, Zrad, CLAHE) {
 	//replace OLK script standard prefix with script's params: e.g. 4,2,2,2,0 --> 42220_[VolumeName]
 	VolumeName = getTitle(); print(VolumeName);
 	if (startsWith(VolumeName, "Med3D_HPass_Reslice")) {
-		rename(replace(VolumeName, "Med3D_HPass_Reslice", sigma +""+ Xrad +""+ Yrad +""+ Zrad +""+ CLAHE));}	
+		rename(replace(VolumeName, "Med3D_HPass_Reslice", sigma +""+ Xrad +""+ Yrad +""+ Zrad +""+ CLAHE));
+	}	
 	if (startsWith(VolumeName, "Med3D_HPass")) {
 		rename(replace(VolumeName, "Med3D_HPass", sigma +""+ Xrad +""+ Yrad +""+ Zrad +""+ CLAHE));	
 	}
@@ -54,7 +55,11 @@ function addSettingsPrefix (sigma, Xrad, Yrad, Zrad, CLAHE) {
 //............................//
 // set DEFAULT value          //
 //............................//
-sigma = 2.0; Xrad = 1.0; Yrad = 1.0; Zrad = 1.0; CLAHE = 0;
+sigma = 2.0; 
+Xrad = 1.0; 
+Yrad = 1.0; 
+Zrad = 1.0; 
+CLAHE = 0;
 //.............................//
 // create box & get USER value //
 //.............................//
@@ -78,23 +83,39 @@ Auto32to16Convert = Dialog.getCheckbox();
 ApplyOnNewVolume = Dialog.getCheckbox();
 
 //print out settings
-	if (CLAHE==0) {CLAHEprint = "No";}
+	if (CLAHE==0) {
+		CLAHEprint = "No";
+	}
 	if (CLAHE==1) {
-		if (CLAHE512) {CLAHEprint = "Yes 512-Bins (Accurate)";} else {CLAHEprint = "Yes 1500-Bins (Accurate)";}}
+		if (CLAHE512) {
+			CLAHEprint = "Yes 512-Bins (Accurate)";
+		} else {
+			CLAHEprint = "Yes 1500-Bins (Accurate)";
+		}
+	}
 	if (CLAHE==2) {
-		if (CLAHE512) {CLAHEprint = "Yes 512-Bins (Fast)";} else {CLAHEprint = "Yes 1500-Bins (Fast)";}}
-	if (Auto32to16Convert==1) {Auto32to16ConvertPrint="Yes";}
-	if (Auto32to16Convert==0) {Auto32to16ConvertPrint="No";}
-		print("\\Clear");
-		print("Selected settings: ");
-		print("Unsharp Radius =" + sigma + ", Xrad ="+Xrad + ", Yrad =" + Yrad + ", Zrad =" + Zrad + ", CLAHE =" + CLAHEprint + ",  Auto32to16Convert: " + Auto32to16ConvertPrint);
-		print(""); //add extra line for print-update to replace
+		if (CLAHE512) {
+			CLAHEprint = "Yes 512-Bins (Fast)";
+		} else {
+			CLAHEprint = "Yes 1500-Bins (Fast)";
+		}
+	}
+	if (Auto32to16Convert==1) {
+		Auto32to16ConvertPrint="Yes";
+	}
+	if (Auto32to16Convert==0) {
+		Auto32to16ConvertPrint="No";
+	}
+	print("\\Clear");
+	print("Selected settings: ");
+	print("Unsharp Radius =" + sigma + ", Xrad ="+Xrad + ", Yrad =" + Yrad + ", Zrad =" + Zrad + ", CLAHE =" + CLAHEprint + ",  Auto32to16Convert: " + Auto32to16ConvertPrint);
+	print(""); //add extra line for print-update to replace
 
 OriginalStackName = getTitle(); //print(stackName);
 
 if (ApplyOnNewVolume) {
 	run("Duplicate...", "duplicate");
-	}
+}
 
 run("Median 3D...", "x=Xrad y=Yrad z=Zrad");
 resetMinAndMax();
@@ -116,53 +137,60 @@ for (i=1;i<=nSlices;i++) {
 	imageCalculator("Subtract create 32-bit", "copy","blured");
 	selectWindow("Result of copy");
 	rename("high_pass_filter"); 			//print ("Sharpening edges...");
-	selectWindow("blured"); close();
+	selectWindow("blured"); 
+	close();
 	selectWindow("high_pass_filter");
 	imageCalculator("Average", stackName,"high_pass_filter");
 	//selectWindow("Result of copy");
 	//rename("HP_filtered");
-	selectWindow("high_pass_filter"); rename(i); //close();
-	selectWindow("copy"); close();
+	selectWindow("high_pass_filter"); 
+	rename(i); //close();
+	selectWindow("copy"); 
+	close();
 	selectWindow(stackName); 
 	setBatchMode(false); // suppress printouts
 }
 
 
-	if (CLAHE==1) {
-		if (CLAHE512==false){
-			for (i=1;i<=nSlices;i++) {
-				setBatchMode(true); // suppress printouts
-				setSlice(i);
-				run("Enhance Local Contrast (CLAHE)", "blocksize=19 histogram=1500 maximum=3 mask=*None*");
-				print("\\Update:" + "CLAHE Processing :", i, " / ", nSlices);}
-				}
-		if (CLAHE512==true){
-				for (i=1;i<=nSlices;i++) {
-					setBatchMode(true); // suppress printouts
-					setSlice(i);
-					run("Enhance Local Contrast (CLAHE)", "blocksize=19 histogram=512 maximum=3 mask=*None*");
-					print("\\Update:" + "CLAHE Processing :", i, " / ", nSlices);}
-					}
-	}
-					
-	if (CLAHE==2) {
-		if (CLAHE512==false){
-			for (i=1;i<=nSlices;i++) {
-				setBatchMode(true); // suppress printouts
-				setSlice(i);
-				run("Enhance Local Contrast (CLAHE)", "blocksize=19 histogram=1500 maximum=3 mask=*None* fast_(less_accurate)");
-				print("\\Update:" + "CLAHE Processing :", i, " / ", nSlices);}
+if (CLAHE==1) {
+	if (CLAHE512==false){
+		for (i=1;i<=nSlices;i++) {
+			setBatchMode(true); // suppress printouts
+			setSlice(i);
+			run("Enhance Local Contrast (CLAHE)", "blocksize=19 histogram=1500 maximum=3 mask=*None*");
+			print("\\Update:" + "CLAHE Processing :", i, " / ", nSlices);
 		}
-		if (CLAHE512==true){
-				for (i=1;i<=nSlices;i++) {
-					setBatchMode(true); // suppress printouts
-					setSlice(i);
-					run("Enhance Local Contrast (CLAHE)", "blocksize=19 histogram=512 maximum=3 mask=*None* fast_(less_accurate)");
-					print("\\Update:" + "CLAHE Processing :", i, " / ", nSlices);}
-				}
 	}
+	if (CLAHE512==true){
+		for (i=1;i<=nSlices;i++) {
+			setBatchMode(true); // suppress printouts
+			setSlice(i);
+			run("Enhance Local Contrast (CLAHE)", "blocksize=19 histogram=512 maximum=3 mask=*None*");
+			print("\\Update:" + "CLAHE Processing :", i, " / ", nSlices);
+		}
+	}
+}
+				
+if (CLAHE==2) {
+	if (CLAHE512==false){
+		for (i=1;i<=nSlices;i++) {
+			setBatchMode(true); // suppress printouts
+			setSlice(i);
+			run("Enhance Local Contrast (CLAHE)", "blocksize=19 histogram=1500 maximum=3 mask=*None* fast_(less_accurate)");
+			print("\\Update:" + "CLAHE Processing :", i, " / ", nSlices);
+		}
+	}
+	if (CLAHE512==true){
+		for (i=1;i<=nSlices;i++) {
+			setBatchMode(true); // suppress printouts
+			setSlice(i);
+			run("Enhance Local Contrast (CLAHE)", "blocksize=19 histogram=512 maximum=3 mask=*None* fast_(less_accurate)");
+			print("\\Update:" + "CLAHE Processing :", i, " / ", nSlices);
+		}
+	}
+}
 
-	setBatchMode(false);
+setBatchMode(false);
 
 run("Enhance Contrast", "saturated=0.05"); print("All Done!");
 if (Auto32to16Convert) {

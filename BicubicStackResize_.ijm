@@ -1,5 +1,5 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Bicubuc stack resize script for Fiji/ImageJ (v20200603) by OLK  ~~~~~~~~
+// Bicubic stack resize script for Fiji/ImageJ (v20200603) by OLK  ~~~~~~~~
 /*
    Copyright 2018 University of Southampton
    Dr. Orestis L. Katsamenis
@@ -27,13 +27,22 @@
 			run("Delete Slice"); //print("Z-dimension size is ", slices, "  Deleting last slice.");
 		}
 		
-		if (width % 2 != 0) {widthEven = width -1; } //print("X-dimension size is ", width, "  Reducing by one.");}
-		 else {widthEven = width; }
+		if (width % 2 != 0) {
+		widthEven = width -1;  
+		//print("X-dimension size is ", width, "  Reducing by one.");
+		} else {
+			widthEven = width;
+		}
 			
-		if (height % 2 != 0) {heightEven = height -1; } //print("Y-dimension size is ", width, "  Reducing by one."); print("");}
-		else {heightEven = height;}
+		if (height % 2 != 0) {
+			heightEven = height -1; 
+		//print("Y-dimension size is ", width, "  Reducing by one."); print("");
+		}else {
+			heightEven = height;
+		}
 		
-		run("Specify...", "width=widthEven height=heightEven x=0 y=0"); run("Crop");
+		run("Specify...", "width=widthEven height=heightEven x=0 y=0"); 
+		run("Crop");
 		run("Select None");
 		
 		run("Scale to Fit");
@@ -47,13 +56,22 @@
 			run("Delete Slice"); //print("Z-dimension size is ", slices, "  Deleting last slice.");
 		}
 		
-		if (width % 2 == 0) {widthOdd = width -1; } //print("X-dimension size is ", width, "  Reducing by one.");}
-		 else {widthOdd = width; }
+		if (width % 2 == 0) {
+			widthOdd = width -1; 
+			//print("X-dimension size is ", width, "  Reducing by one.");
+		} else {
+			widthOdd = width; 
+		}
 			
-		if (height % 2 == 0) {heightOdd = height -1; } //print("Y-dimension size is ", width, "  Reducing by one."); print("");}
-		else {heightOdd = height;}
+		if (height % 2 == 0) {
+			heightOdd = height -1; 
+			//print("Y-dimension size is ", width, "  Reducing by one."); print("");
+		}else {
+			heightOdd = height;
+		}
 		
-		run("Specify...", "width=widthOdd height=heightOdd x=0 y=0"); run("Crop");
+		run("Specify...", "width=widthOdd height=heightOdd x=0 y=0"); 
+		run("Crop");
 		run("Select None");
 		
 		run("Scale to Fit");
@@ -64,16 +82,29 @@
 // get Input volume name      //
 //............................//
 	waitForUser("Action required", "Select Input Volume window *then* OK [ESC to abort]"); 
-	InputVolume = getTitle(); bitDepthVolume = bitDepth();
+	InputVolume = getTitle(); 
+	bitDepthVolume = bitDepth();
 	print("\\Clear"); // Clear Log Window
 	getDateAndTime(year, month, week, day, hour, min, sec, msec); //N.B. 'month' and 'dayOfWeek' are zero-based indexes
-		month = month +1; // add 1 to month to make it 1-based index
-		if (month < 10) {monthStr ="0" + month;} else {monthStr ="" + month;} //change month to format Jan = 01, Feb =02, ...
-		if (day<10) {dayStr = "0"+day;} else {dayStr = ""+day;}  	
-		print("Date: "+year+"/"+monthStr+"/"+dayStr); //print(month);
-	  	YYYYDDMM = ""+year +""+monthStr+""+dayStr + "-" + hour + "h" + min + "m"; print(YYYYDDMM);
-	print("Volume name :",InputVolume); print("bitDepth : ", bitDepthVolume);
-	setSlice(nSlices/2); resetMinAndMax();
+	month = month +1; // add 1 to month to make it 1-based index
+	if (month < 10) {
+		monthStr ="0" + month;
+	} else {
+		monthStr ="" + month;
+	} //change month to format Jan = 01, Feb =02, ...
+	if (day<10) {
+		dayStr = "0"+day;
+	} else {
+		dayStr = ""+day;
+	}  	
+	print("Date: "+year+"/"+monthStr+"/"+dayStr); 
+	//print(month);
+	YYYYDDMM = ""+year +""+monthStr+""+dayStr + "-" + hour + "h" + min + "m"; 
+	print(YYYYDDMM);
+	print("Volume name :",InputVolume); 
+	print("bitDepth : ", bitDepthVolume);
+	setSlice(nSlices/2); 
+	resetMinAndMax();
 
 
 //.............................//
@@ -81,7 +112,7 @@
 //.............................//
 	//-----------------------------------------------------------------------
 		Dialog.create("User Input Values");	//Creates a dialog box
-		Dialog.addMessage("Binnin factor:");
+		Dialog.addMessage("Binning factor:");
 		Dialog.addNumber("Reduce X,Y,Z dimensions by a factor of :", 2); //1
 	//-----------------------------------------------------------------------
 	    Dialog.show();
@@ -94,16 +125,20 @@
 //............................//
 	run("Duplicate...", "duplicate"); //duplicate stack to resize
 	if (binning % 2 != 0) { //binning factor is an even number 3,5,7...
-		MakeDimensionsOdd(); }
-		else { 				//binning factor is an odd number 2,4,6...
-			MakeDimensionsEven();}
+		MakeDimensionsOdd(); 
+	}else { 				//binning factor is an odd number 2,4,6...
+		MakeDimensionsEven();
+	}
 			
 	getDimensions(width, height, channels, slices, frames);		
-	widthNew = width/2; heightNew = height/2; depthNew = slices/2;
+	widthNew = width/2; 
+	heightNew = height/2; 
+	depthNew = slices/2;
 	run("Size...", "width=widthNew height=heightNew depth=depthNew constrain average interpolation=Bicubic");
 	getDimensions(width, height, channels, slices, frames);		
 	rename(InputVolume + "_bin" + binning + "x_" + width + "x" + height + "x" + slices + "x" + bitDepthVolume + "bit");
-	setSlice(nSlices/2); resetMinAndMax();
+	setSlice(nSlices/2); 
+	resetMinAndMax();
 
 	
 //............................//
