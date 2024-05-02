@@ -76,7 +76,7 @@ It will automatically pull the x,y,z dimensions and the bit depth from the vgi f
 These need to have the filename in the format as described in addVolumeDimensions.  
 
 ## Suppress Lines
-Works on a single volume to suppress repeating straight lines throughout the volume.  The user is prompted for a number of parameters:
+Works on a single volume to suppress repeating straight line artefacts throughout the volume.  The user is prompted for a number of parameters:
 - Number of line orientations to suppress
 - Frequency bandwidth for the FFT filter used to suppress the Lines
 - Orientation rigidity - how much the line can deviate from line specified.
