@@ -222,7 +222,11 @@ function CalibrateVolume(InputVolume, BckCorVolumeName) {
 	//............................//
 	// set DEFAULT value          //
 	//............................//
-		run("Clear Results"); SliceThickness = 5; RangeMin = 1; RangeMax = nSlices; KeepPartialVolume = false; 
+		run("Clear Results"); 
+		SliceThickness = 5; 
+		RangeMin = 1; 
+		RangeMax = nSlices; 
+		KeepPartialVolume = false; 
 		print("- - - - - - - - - -");
 		print("Staring script . . . ");
 		print("- - - - - - - - - -");

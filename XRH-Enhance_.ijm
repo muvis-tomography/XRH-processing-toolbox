@@ -41,7 +41,8 @@
 
 function addSettingsPrefix (sigma, Xrad, Yrad, Zrad, CLAHE) {	
 	//replace OLK script standard prefix with script's params: e.g. 4,2,2,2,0 --> 42220_[VolumeName]
-	VolumeName = getTitle(); print(VolumeName);
+	VolumeName = getTitle(); 
+	print(VolumeName);
 	if (startsWith(VolumeName, "Med3D_HPass_Reslice")) {
 		rename(replace(VolumeName, "Med3D_HPass_Reslice", sigma +""+ Xrad +""+ Yrad +""+ Zrad +""+ CLAHE));
 	}	
