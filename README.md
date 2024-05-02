@@ -11,26 +11,28 @@ The XRH facility, located at the University Hospital Southampton (UHS), is a sta
 
 The XRH facility is open to national and international clients through various accessing options. 
 
-** Note: This toolbox is intended to be used with XRH data and requires basic knowledge of Fiji/ImageJ. It is recommended to refer to the documentation and user manual for detailed instructions on using the toolbox and its scripts.
+
 
 == Features include
 
-* Automatic generation of videos from single and thick slice stacks
-* Suppression of line- artefacts in XRH images
-* Automatic concatenation and intensity equalisation, when stitching of multiple XRH volumes is required
-* Image quality and contrast boosting using at "thick-slice-roll" method [ Experimental! ]
-* Equalisation of variable background intensities between consequent slices within a XRH image stack 
-* Thick slice stack generation
-* Bicubic stack resizing
-* Enhancement script of XRH images
-* Relevant on histology-relevant planes
-* and more
+- Automatic generation of videos from single and thick slice stacks
+- Suppression of line- artefacts in XRH images
+- Automatic concatenation and intensity equalisation, when stitching of multiple XRH volumes is required
+- Image quality and contrast boosting using at "thick-slice-roll" method [ Experimental! ]
+- Equalisation of variable background intensities between consequent slices within a XRH image stack 
+- Thick slice stack generation
+- Bicubic stack resizing
+- Enhancement script of XRH images
+- Relevant on histology-relevant planes
+- and more
 
 == Usage
 
-* Download the XRH Processing Toolbox.
-* Open ImageJ and go to "Plugins" > "Macros" > "Run" to run the desired script on your XRH data.
-* Follow the prompts and options provided by the script to process your XRH data.
+- Download the XRH Processing Toolbox.
+- Open ImageJ and go to "Plugins" > "Macros" > "Run" to run the desired script on your XRH data.
+- Follow the prompts and options provided by the script to process your XRH data.
+
+A summary of the functionality of options for each macro is given in USAGE.md
 
 == Licence
 This toolbox is released under the Apache v2.0 licence, allowing users to freely use, modify, and distribute the scripts.
