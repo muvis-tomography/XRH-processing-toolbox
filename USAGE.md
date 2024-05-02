@@ -12,7 +12,8 @@ it and open it without needing manual dimensions being entered.
 
 ## AutomaticConcatenationPlusIntensityEqualisation
 Takes two overlapping scan volumes (with same bit depth) and finds the same slice in both prior to concatenating into a new stack.  The defaults should generally work satisfactorily, but can be overridden to provide
-more flexibility if needed.  It will prompt the user to navigate to approximately the same slice in each stack and with then search either side of that oo the top stack to find the best match.  
+more flexibility if needed.  It will prompt the user to navigate to approximately the same slice in each stack and with then search either side of that on the top stack to find the best match.  
+
 Due to the physical configuration of the scanners this macro was written for heel effect is present in the scans, this is corrected when concatenating the scans otherwise there will be a 
 significant step change.  Once complete the script will provide 8 different rotational slices of the concatenated stack so that the result can be evaluated.
 
@@ -54,13 +55,13 @@ When scanning a wax block on a histology cassette the plastic cassette itself ca
 Once the user has selected the volume they will be prompted to draw a line parallel to the cassette artefact that they want to remove (a single slice will be presented for this to be done on).  The volume is then rotated so that the line is parallel to Y'Y. The volume is rotated back to the original angle at the end of the script.  If manual operation is chosen then the user has to manually select a background area of the volume.  Each slice will then be processed in turn.  The user can chose to do grey level calibration at the end to remove any offset introduced by the processing.
 
 ## HistRelevantReslice
-Works on a single volume, and rotates it so that scrolling through the Z stack is the same as slicing the wax block with a microtome.
+Works on a single volume, and rotates it so that scrolling through the Z stack is the same as slicing the wax block with a microtome. This script prompts the user to draw a line on the wax-air boundary for each plane and will then rotate the volume to align these with the axis, enlarging the volume as needed.  At the end an option is given to reverse the stack if it is slicing from cassette to top of block rather than top down.
 
 Options:
  - Manual/Automatic cropping of volume to wax.
  - Optimising memory usage - closes temporary volumes when no longer needed to free up system RAM.
  
- This script prompts the user to draw a line on the wax-air boundary for each plane and will then rotate the volume to align these with the axis, enlarging the volume as needed.  At the end an option is given to reverse the stack if it is slicing from cassette to top of block rather than top down.
+
 
 ## ImportRAWandNikonVOLfiles
 A simple macro to make opening either RAW files or vgi./.vol files easier & quicker.  Can be bound to shortcut keys e.g. 'v' and 'g' to make opening even quicker.
@@ -83,7 +84,7 @@ Works on a single volume to suppress repeating straight lines throughout the vol
 - Calibration - adjust the post correction grey values to match the pre-correction ones
 
 ## ThickSliceBoost
-Works on a single volume and will use a rolling thick slice window to combine slices to enhance the image.  
+Works on a single volume and will use a rolling thick slice window to combine slices to enhance the image.  A volume of thick slices will be generated using the first algorithm selected, this volume is then combined with the original to enhance each slice using the second algorithm.  Grey levels can then be corrected using the gamma correction.
 
 Options:
 - Number of slices to include in calculation
@@ -104,7 +105,7 @@ Options:
 	- Difference
 - Gamma correction factor
 
-A volume of thick slices will be generated using the first algorithm selected, this volume is then combined with the original to enhance each slice using the second algorithm.  Grey levels can then be corrected using the gamma correction.
+
 
 ## Thick Slice Roll
 Works on a single volume, will prompt user to crop an area of interest if desired.  Will go through the entire stack combining the desired number of slices into a single slice before moving onto the next one.
