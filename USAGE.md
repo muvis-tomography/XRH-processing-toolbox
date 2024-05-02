@@ -45,7 +45,7 @@ Takes a volume as input.  The user needs to select an area containing background
 
 TODO OLK TO add more in here.
 
-## BicubisStackResize
+## BicubicStackResize
 TAkes on a volume and resizes it by the same amount in all dimensions. It prompts the user to enter how many times they want to bin the data, for example 2 would half the size of all dimensions.  If binning by an even number and the volume has an odd dimension it will remove 1 pixel in the required dimension to make it even.
 
 ## cassetteBandsCorrection
