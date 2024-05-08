@@ -42,9 +42,8 @@ If auto generation is disabled then the following single stacks can be created
 Prior to video generation the volume can be cropped to only show a ROI.
 
 ## BackgroundLinearSlopeCorrection
-Takes a volume as input.  The user needs to select an area containing background.  This area must contain background (e.g. wax) throughout the entire stack.  It then goes through this background area and identifies any linear gradient between the slices.
-
-TODO OLK TO add more in here.
+This script conducts linear intensity correction (shifting) for each slice intensity (brightness) within a stack of images (single volume). Its primary function is to ensure uniform intensity levels across all slices, particularly useful when variations in brightness occur throughout the stack or when individual slices exhibit differing intensities across the same feature, which might result from processes like FFT filtering of the volume. By selecting a reference area (such as the background) whose intensity should remain consistent across all slices, the script systematically adjusts each slice's intensity to align with this reference.
+Following the intensity correction process, the script provides a "calibration" option, which allows users to adjust the intensity scale of the corrected volume according to a specific rage taken from a user-defined reference image.
 
 ## BicubicStackResize
 Legacy code, please use the built in tools that can achieve the same function.
