@@ -47,7 +47,8 @@ Takes a volume as input.  The user needs to select an area containing background
 TODO OLK TO add more in here.
 
 ## BicubicStackResize
-TAkes on a volume and resizes it by the same amount in all dimensions. It prompts the user to enter how many times they want to bin the data, for example 2 would half the size of all dimensions.  If binning by an even number and the volume has an odd dimension it will remove 1 pixel in the required dimension to make it even.
+Legacy code, please use the built in tools that can achieve the same function.
+Takes on a volume and resizes it by the same amount in all dimensions. It prompts the user to enter how many times they want to bin the data, for example 2 would half the size of all dimensions.  If binning by an even number and the volume has an odd dimension it will remove 1 pixel in the required dimension to make it even.
 
 ## cassetteBandsCorrection
 When scanning a wax block on a histology cassette the plastic cassette itself can cause artefacts that propagate through the image, this macro is designed to remove them.  This works on a single volume that has the issue and tries to remove the artefacts.  The volume must first be orientated so that scrolling through the Z stack scrolls through the histologically relevant plane.  This can be achieved using the HistologicalReleventReslice macro.

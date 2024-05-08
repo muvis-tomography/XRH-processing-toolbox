@@ -81,6 +81,13 @@
 //............................//
 // get Input volume name      //
 //............................//
+
+	title = "Legacy Script Warning";
+	message = "This is a legacy script. It is advised you use either:\n \n" +
+			 "Image > Stacks > Tools > Reduce...\n" +
+			 "or\n" +
+			 "Image > Adjust > Size...";
+	showMessage(title, message);
 	waitForUser("Action required", "Select Input Volume window *then* OK [ESC to abort]"); 
 	InputVolume = getTitle(); 
 	bitDepthVolume = bitDepth();
