@@ -40,7 +40,13 @@
 //............................//
 // set DEFAULT value          //
 //............................//
-sigma = 2.0; Xrad = 1.0; Yrad = 1.0; Zrad = 1.0; CLAHE = 0; VoxelSize = 1.0; 32to16 = true;
+sigma = 2.0; 
+Xrad = 1.0; 
+Yrad = 1.0; 
+Zrad = 1.0; 
+CLAHE = 0; 
+VoxelSize = 1.0; 
+32to16 = true;
 //.............................//
 // create box & get USER value //
 //.............................//
@@ -83,10 +89,9 @@ if (HistReslice) {
 	print ("running HistRelevantReslice ");
 	if (OptimiseMemory)	{
 		run("HistRelevantReslice ", "cropping=Manual optimise");
-		}
-	else{
+	}else{
 		run("HistRelevantReslice ", "cropping=Manual");
-		}
+	}
 		
 	ResliceVolumeName = getTitle();
 	Dialog.create("Reverse or not Reverse?");
@@ -96,20 +101,21 @@ if (HistReslice) {
 	Dialog.show();
 	ReverseStackCheck=Dialog.getRadioButton();
 	if (ReverseStackCheck == "Stack needs reversing. Reverse now!") {
-	  	selectWindow(ResliceVolumeName); run("Reverse");
+	  	selectWindow(ResliceVolumeName); 
+		run("Reverse");
 	  	print("User said: "+ReverseStackCheck);
-	  	}
+	}
 	  	
-	  	selectWindow(ResliceVolumeName);
+	selectWindow(ResliceVolumeName);
 }
 
 preEnchancedVolumeName = getTitle();
 
 if (_32to16) {
-	run("XRH-Enhance ", "gaussian="+sigma+" 3d="+Xrad+" 3d_0="+Yrad+" 3d_1="+Zrad+" clahe...,=0 [-50 "); }
-	else {
-		run("XRH-Enhance ", "gaussian="+sigma+" 3d="+Xrad+" 3d_0="+Yrad+" 3d_1="+Zrad+" clahe...,=0 "); 
-	}
+	run("XRH-Enhance ", "gaussian="+sigma+" 3d="+Xrad+" 3d_0="+Yrad+" 3d_1="+Zrad+" clahe...,=0 [-50 "); 
+}else {
+	run("XRH-Enhance ", "gaussian="+sigma+" 3d="+Xrad+" 3d_0="+Yrad+" 3d_1="+Zrad+" clahe...,=0 "); 
+}
 	
 EnchancedVolumeName = getTitle();
   	

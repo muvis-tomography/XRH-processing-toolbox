@@ -24,9 +24,11 @@
 // get Input volume name      //
 //............................//
 	waitForUser("Action required", "Select Input Volume window *then* OK [ESC to abort]"); 
-	InputVolume = getTitle(); bitDepthVolume = bitDepth();
+	InputVolume = getTitle(); 
+	bitDepthVolume = bitDepth();
 	print("\\Clear"); // Clear Log Window
-	print(InputVolume); 	print("bitDepth : ", bitDepthVolume);
+	print(InputVolume); 	
+	print("bitDepth : ", bitDepthVolume);
 	
 //............................//
 // Wait for user selection    //
@@ -38,7 +40,10 @@
 //............................//
 // set DEFAULT value          //
 //............................//
-	run("Clear Results"); SliceThickness = 10; RangeMin = 1; RangeMax = nSlices; 
+	run("Clear Results"); 
+	SliceThickness = 10; 
+	RangeMin = 1; 
+	RangeMax = nSlices; 
 	print("- - - - - - - - - -");
 	print("Staring script . . . ");
 	print("- - - - - - - - - -");
@@ -75,8 +80,10 @@
 
 selectWindow(InputVolume);
 print("Slice range : ",RangeMin, " ,", RangeMax);
-Range = RangeMax-RangeMin; print("Range : ", Range, "clices"); 
-ThickSliceNumber = Range - SliceThickness; print("Thick slice stack size (slices) : ", ThickSliceNumber);
+Range = RangeMax-RangeMin; 
+print("Range : ", Range, "clices"); 
+ThickSliceNumber = Range - SliceThickness; 
+print("Thick slice stack size (slices) : ", ThickSliceNumber);
 
 	 
 setBatchMode(true);
@@ -95,16 +102,15 @@ for (i = 0; i < ThickSliceNumber; i++) {
 	run("Z Project...", "projection=&Operation");
 	if (i == 0) { 
 		rename("ThickSliceStack");
-	}
-		else {
-		ThickSliceTempName = (i+1); rename(ThickSliceTempName);
+	}else {
+		ThickSliceTempName = (i+1); 
+		rename(ThickSliceTempName);
 		close("TempThickSliceStack");
 	}
-	
-		if (i != 0) {
-			img2 = ThickSliceTempName;
-			run("Concatenate...", "title=ThickSliceStack open image1=ThickSliceStack image2=&img2");
-		}
+	if (i != 0) {
+		img2 = ThickSliceTempName;
+		run("Concatenate...", "title=ThickSliceStack open image1=ThickSliceStack image2=&img2");
+	}
   }
 setBatchMode(false);
 

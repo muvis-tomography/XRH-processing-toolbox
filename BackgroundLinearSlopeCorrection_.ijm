@@ -41,13 +41,16 @@ function CalibrateVolume(InputVolume, BckCorVolumeName) {
 	// select BckCorr volume - Wax --------------------------------------------------
 	setTool("rectangle");
 	run("Clear Results");
-	selectWindow(BckCorVolumeName); resetMinAndMax;
+	selectWindow(BckCorVolumeName); 
+	resetMinAndMax;
 	setSlice(nSlices/2);
 	waitForUser( "Pause","select Wax ROI in BckCorVolume Volume and then press OK \n ...");
 	BckCorVolumeWaxSlice = getSliceNumber();
 	roiManager("Add"); // Add Wax selection to ROI Manager
-	run("Measure"); BckCorVolumeWax = getResult("Mean"); // get Wax Mean value from LS volume
-	print("BckCorVolumeWax = ", BckCorVolumeWax); run("Select None");
+	run("Measure"); 
+	BckCorVolumeWax = getResult("Mean"); // get Wax Mean value from LS volume
+	print("BckCorVolumeWax = ", BckCorVolumeWax); 
+	run("Select None");
 	//--------------------------------------------------------------------------
 	// select BckCor volume volume - Tissue -----------------------------------------------
 	run("Clear Results");
@@ -56,22 +59,29 @@ function CalibrateVolume(InputVolume, BckCorVolumeName) {
 	BckCorVolumeTissueSlice = getSliceNumber();
 	roiManager("Add"); // Add Wax selection to ROI Manager
 	run("Measure"); BckCorVolumeTissue = getResult("Mean"); // get Wax Mean value from LS volume
-	print("BckCorVolumeTissue = ", BckCorVolumeTissue); run("Select None");
+	print("BckCorVolumeTissue = ", BckCorVolumeTissue); 
+	run("Select None");
 
 	//--------------------------------------------------------------------------
 	// select Input volume - Wax ----------------------------------------------
 	run("Clear Results");
 	selectWindow(InputVolume);
 	setSlice(BckCorVolumeWaxSlice); // go to appropriate slice in the stack
-	roiManager("Select", 0); run("Measure"); InputVolumeWax = getResult("Mean"); // get Wax Mean value from LS volume
-	print("InputVolumeWax = ", BckCorVolumeWax); run("Select None");
+	roiManager("Select", 0); 
+	run("Measure"); 
+	InputVolumeWax = getResult("Mean"); // get Wax Mean value from LS volume
+	print("InputVolumeWax = ", BckCorVolumeWax); 
+	run("Select None");
 	//--------------------------------------------------------------------------
 	// select Input volume - Tissue -------------------------------------------
 	run("Clear Results");
 	selectWindow(InputVolume);
 	setSlice(BckCorVolumeTissueSlice); // go to appropriate slice in the stack
-	roiManager("Select", 1); run("Measure"); InputVolumeTissue = getResult("Mean"); // get Wax Mean value from LS volume
-	print("InputVolumeWax = ", InputVolumeTissue); run("Select None");
+	roiManager("Select", 1); 
+	run("Measure"); 
+	InputVolumeTissue = getResult("Mean"); // get Wax Mean value from LS volume
+	print("InputVolumeWax = ", InputVolumeTissue); 
+	run("Select None");
 
 
 	//............................//
@@ -103,9 +113,11 @@ function CalibrateVolume(InputVolume, BckCorVolumeName) {
 
 	// Offset BckCorVolume tissue intensity to match InputVolume's -----
 	setSlice(BckCorVolumeTissueSlice); // go to appropriate slice in the stack
-	roiManager("Select", 1); run("Measure"); calBckCorTissue = getResult("Mean"); // get Wax Mean value from LS volume
+	roiManager("Select", 1); run("Measure"); 
+	calBckCorTissue = getResult("Mean"); // get Wax Mean value from LS volume
 	Offset = InputVolumeTissue-calBckCorTissue;
-	print("Offset (InputVolumeTissue-calBckCorTissue) = ", Offset); run("Select None");
+	print("Offset (InputVolumeTissue-calBckCorTissue) = ", Offset); 
+	run("Select None");
 	run("Add...", "value=Offset stack"); resetMinAndMax();
 	selectWindow(InputVolume); bitDepthInput = bitDepth();
 	//selectWindow("c"+BCorVolumeName);
@@ -125,15 +137,19 @@ function CalibrateVolume(InputVolume, BckCorVolumeName) {
 //............................//
 // set DEFAULTS & Initiate    //
 //............................//
-run("Clear Results"); run("Set Measurements...", "mean min redirect=None decimal=3");
-negativeBckValueFlag =0; negativeBckValue =0;
+run("Clear Results"); 
+run("Set Measurements...", "mean min redirect=None decimal=3");
+negativeBckValueFlag =0; 
+negativeBckValue =0;
 
 //-----------------------------------------------------------------------
 // get Input volume name
 waitForUser("Action required", "Select Input Volume window *then* OK [ESC to abort]"); 
-InputVolume = getTitle(); bitDepthInput = bitDepth();
+InputVolume = getTitle(); 
+bitDepthInput = bitDepth();
 InputVolumeCorrected = "sc_"+InputVolume //SC: Background Slope correction
-run("Duplicate...", "title=InputVolumeTemp duplicate"); rename(InputVolumeCorrected);
+run("Duplicate...", "title=InputVolumeTemp duplicate"); 
+rename(InputVolumeCorrected);
 
 //-----------------------------------------------------------------------
 // get background ROI
@@ -144,33 +160,37 @@ run("Duplicate...", "title=background duplicate");
 //-----------------------------------------------------------------------
 // Main Script
 
-selectWindow("background"); //run("32-bit");
+selectWindow("background"); 
+//run("32-bit");
 greyBckCore = newArray(nSlices);
 
-for (i=1;i<=nSlices;i++) {
+for (i=1; i<=nSlices; i++) {
 	setSlice(i);
-	run("Select All"); run("Measure");
+	run("Select All"); 
+	run("Measure");
 	greyBckCore[i-1] =getResult("Mean",i-1);
 	// linear shift to positive values (in case of 32bit datasets)
 	if (greyBckCore[i-1]<negativeBckValue){
 		print ("negative Grey value fount!");
-		negativeBckValueFlag =1;
-		negativeBckValue =greyBckCore[i-1];
+		negativeBckValueFlag = 1;
+		negativeBckValue = greyBckCore[i-1];
 		}
 }
 
-selectWindow(InputVolumeCorrected); run("Select None"); run("32-bit");
+selectWindow(InputVolumeCorrected); 
+run("Select None"); 
+run("32-bit");
 //print(negativeBckValueFlag);
 if (negativeBckValueFlag==1) {
 	print ("Flag =1; Shifting to positive valuers");
-	for (i=1;i<=nSlices;i++) {
+	for (i=1; i<=nSlices; i++) {
 		setSlice(i);
 		corValueTemp = greyBckCore[i-1]-negativeBckValue;
 		run("Subtract...", "value=corValueTemp slice");
 		}
 	}
 	else {
-		for (i=1;i<=nSlices;i++) {
+		for (i=1; i<=nSlices; i++) {
 			setSlice(i);
 			greyBckCoreTemp=greyBckCore[i-1];
 			run("Subtract...", "value=greyBckCoreTemp slice");
@@ -182,7 +202,7 @@ if (negativeBckValueFlag==1) {
 
 //-----------------------------------------------------------------------
 //Calibrate and Return to Input's bit-depth
-	CalibrateVolume(InputVolume, InputVolumeCorrected);
+CalibrateVolume(InputVolume, InputVolumeCorrected);
 
 //-----------------------------------------------------------------------
 //Create preview
